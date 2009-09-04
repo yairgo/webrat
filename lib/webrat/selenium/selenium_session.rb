@@ -51,6 +51,15 @@ module Webrat
 
     webrat_deprecate :fills_in, :fill_in
 
+    def field_labeled(field)
+      locator = "fieldlabeled=#{field}"
+      temp = selenium.wait_for_element locator, :timeout_in_seconds => 5
+      fake_field = Struct.new(:value, :checked?).new
+      fake_field.value = selenium.field(locator)
+      fake_field.checked = selenium.checked?(locator)
+      fake_field
+    end
+
     def response
       SeleniumResponse.new(self, response_body)
     end
